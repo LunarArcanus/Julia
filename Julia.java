@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package julia;
+import java.io.File;
 
 /**
  *
@@ -15,8 +16,10 @@ public class Julia {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        final String imageLocation;
+        imageLocation = "."+File.separator+"resources"+File.separator+"face.jpg";
         AI ai = new AI("Julia");
-        GUI gui = new GUI("Chat with Julia");
+        GUI gui = new GUI("Chat with Julia", imageLocation);
     }
     
 }
