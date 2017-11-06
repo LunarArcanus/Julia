@@ -13,18 +13,15 @@ import javax.swing.*;
  *
  * @author 3ynar
  */
-public class GUI {
+public class GUI extends JApplet implements ActionListener {
 
     private JFrame mainFrame;
     private JFrame responseFrame;
     private JFrame historyFrame;
+    
+    private JButton sayButton;
 
-    private JLabel iconLabel;
-
-    private JOptionPane optionPane;
-    private String username;
-    private String imageLocation;
-    private ImageIcon image;
+    public String username;
 
     public GUI(String title, String imageLocation) {
         initialise(title, imageLocation);
@@ -45,13 +42,13 @@ public class GUI {
         } else {
             username = name;
         }
-        System.out.println(this.username);
     }
 
     private void initAvatarFrame(String title, String imageLocation) {
         mainFrame = new JFrame(title);
+        JLabel iconLabel;
+        ImageIcon image;
         mainFrame.setLayout(new FlowLayout());
-        this.imageLocation = imageLocation;
         image = new ImageIcon(imageLocation, "Avatar");
 
         mainFrame.addWindowListener(new WindowAdapter() {
@@ -61,8 +58,9 @@ public class GUI {
             }
         });
 
-        iconLabel = new JLabel(null, image, JLabel.CENTER);
+        iconLabel = new JLabel(image, JLabel.CENTER);
         mainFrame.add(iconLabel);
+        mainFrame.setSize(500, 500);
         mainFrame.setVisible(true);
     }
 
@@ -82,13 +80,14 @@ public class GUI {
                         "Cannot close window", JOptionPane.INFORMATION_MESSAGE);
             }
         });
-        historyFrame.setSize(200, 200);
+        historyFrame.setSize(200, 600);
         historyFrame.setVisible(true);
     }
 
     private void initResponseFrame() {
         JLabel botResponse;
         JTextField userText;
+        JPanel panel = new JPanel();
 
         responseFrame = new JFrame("Dialogue");
         responseFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -102,7 +101,29 @@ public class GUI {
                         "Cannot close window", JOptionPane.INFORMATION_MESSAGE);
             }
         });
-        responseFrame.setSize(200, 200);
+        
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        
+        botResponse = new JLabel("foo", JLabel.CENTER);
+        userText = new JTextField();
+        sayButton = new JButton("Say");
+        sayButton.setBackground(Color.green);
+        sayButton.addActionListener(this);
+        
+        panel.add(botResponse);
+        panel.add(userText);
+        panel.add(sayButton);
+        
+        responseFrame.add(panel);
+        responseFrame.setSize(600, 200);
         responseFrame.setVisible(true);
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        Object source = event.getSource();
+       if (source == sayButton) {
+           System.out.println("foo");
+       } 
     }
 }
