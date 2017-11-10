@@ -17,10 +17,14 @@ public class Julia {
      */
     public static void main(String[] args) {
         final String imageLocation;
+        final AI ai;
+        final GUI gui;
+        
         imageLocation = String.join(File.separator,
                 ".", "resources", "avatar.jpg");
-        AI ai = new AI("Julia");
-        GUI gui = new GUI("Chat with Julia", imageLocation);
+        ai = new AI("Julia");
+        gui = new GUI("Chat with Julia", imageLocation);
+        gui.setAgent(ai);
     }
     
 }

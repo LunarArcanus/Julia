@@ -14,10 +14,14 @@ import javax.swing.*;
  * @author 3ynar
  */
 public class GUI extends JApplet implements ActionListener {
+    private AI agent;
 
     private JFrame mainFrame;
     private JFrame responseFrame;
     private JFrame historyFrame;
+
+    JLabel botResponse;
+    JTextField userText;
     
     private JButton sayButton;
 
@@ -32,6 +36,10 @@ public class GUI extends JApplet implements ActionListener {
         assignUsername();
         initResponseFrame();
         initHistoryFrame();
+    }
+    
+    public void setAgent(AI agent) {
+        this.agent = agent;
     }
 
     private void assignUsername() {
@@ -65,8 +73,8 @@ public class GUI extends JApplet implements ActionListener {
     }
 
     private void initHistoryFrame() {
-        JLabel userResponse;
-        JLabel botResponse;
+        JLabel userHistoryResponse;
+        JLabel botHistoryResponse;
 
         historyFrame = new JFrame("History");
         historyFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -85,8 +93,6 @@ public class GUI extends JApplet implements ActionListener {
     }
 
     private void initResponseFrame() {
-        JLabel botResponse;
-        JTextField userText;
         JPanel panel = new JPanel();
 
         responseFrame = new JFrame("Dialogue");
@@ -122,8 +128,15 @@ public class GUI extends JApplet implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
         Object source = event.getSource();
-       if (source == sayButton) {
-           System.out.println("foo");
+        String text = userText.getText();
+        String response;
+        
+        agent.setQuery(text);
+        response = agent.getResponse();
+        
+        
+       if (source.equals(sayButton)) {
+           System.out.println(response);
        } 
     }
 }
