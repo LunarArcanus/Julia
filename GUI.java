@@ -13,7 +13,7 @@ import javax.swing.*;
  *
  * @author 3ynar
  */
-public class GUI extends JApplet implements ActionListener {
+public class GUI extends JApplet implements ActionListener, KeyListener {
     private AI agent;
 
     private JFrame mainFrame;
@@ -112,6 +112,7 @@ public class GUI extends JApplet implements ActionListener {
         
         botResponse = new JLabel("foo", JLabel.CENTER);
         userText = new JTextField();
+        userText.addKeyListener(this);
         sayButton = new JButton("Say");
         sayButton.setBackground(Color.green);
         sayButton.addActionListener(this);
@@ -137,6 +138,21 @@ public class GUI extends JApplet implements ActionListener {
         
        if (source.equals(sayButton)) {
            System.out.println(response);
-       } 
+       }
     }
+    
+    @Override
+    public void keyPressed(KeyEvent event) {
+        int keyCode = event.getKeyCode();
+        
+        if (keyCode == KeyEvent.VK_ENTER) {
+            sayButton.doClick();
+        }
+    }
+    
+    @Override
+    public void keyReleased(KeyEvent event) {}
+    
+    @Override
+    public void keyTyped(KeyEvent event) {}
 }
