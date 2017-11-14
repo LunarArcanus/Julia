@@ -137,6 +137,7 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
         
         
        if (source.equals(sayButton)) {
+           userText.setText(null);
            System.out.println(response);
        }
     }
