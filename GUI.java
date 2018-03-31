@@ -25,6 +25,9 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
     private JButton sayButton;
 
     public String username;
+    
+    private JLabel[] chatHistory;
+    private int chatIndex = 0;
 
     public GUI(String title, AI ai, String imageLocation) {
         initialise(title, ai, imageLocation);
@@ -32,6 +35,7 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
 
     private void initialise(String title, AI ai, String imageLocation) {
         agent = ai;
+        chatHistory = new JLabel[10];
         initAvatarFrame(title, imageLocation);
         assignUsername();
         initResponseFrame();
@@ -69,19 +73,24 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
 
         iconLabel = new JLabel(image, JLabel.CENTER);
         panel.add(iconLabel);
-        getContentPane().add(panel);
         mainFrame.add(panel);
-        mainFrame.setSize(500, 500);
+        mainFrame.pack();
         mainFrame.setVisible(true);
     }
 
     private void initHistoryFrame() {
         historyFrame = new JFrame("History");
         JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        
         userHistoryResponse = new JLabel();
         botHistoryResponse = new JLabel();
+        
         JLabel userLabel = new JLabel(username);
         JLabel botLabel = new JLabel(agent.getBotName());
+        userLabel.setForeground(Color.green);
+        botLabel.setForeground(Color.blue);
+        
         historyFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         historyFrame.addWindowListener(new WindowAdapter() {
             @Override
@@ -93,14 +102,13 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
                         "Cannot close window", JOptionPane.INFORMATION_MESSAGE);
             }
         });
-        
+
         panel.add(userLabel);
         panel.add(userHistoryResponse);
         panel.add(botLabel);
         panel.add(botHistoryResponse);
-        getContentPane().add(panel);
         historyFrame.add(panel);
-        historyFrame.setSize(200, 600);
+        historyFrame.pack();
         historyFrame.setVisible(true);
     }
 
@@ -120,10 +128,10 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
             }
         });
 
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setLayout(new FlowLayout());
 
-        botResponse = new JLabel("Enter your text here", JLabel.CENTER);
-        userText = new JTextField();
+        botResponse = new JLabel("Enter your text here");
+        userText = new JTextField(50);
         userText.addKeyListener(this);
         sayButton = new JButton("Say");
         sayButton.setBackground(Color.green);
@@ -133,10 +141,18 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
         panel.add(userText);
         panel.add(sayButton);
 
-        getContentPane().add(panel);
         responseFrame.add(panel);
-        responseFrame.setSize(600, 200);
+        responseFrame.pack();
         responseFrame.setVisible(true);
+    }
+    
+    private void advanceHistory() {
+        if (chatIndex < 10) {
+            chatIndex++;
+        }
+        else {
+            chatIndex = 0;
+        }
     }
 
     @Override
