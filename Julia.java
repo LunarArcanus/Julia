@@ -18,8 +18,7 @@ public class Julia {
         imageLocation = String.join(File.separator,
                 ".", "resources", "avatar.jpg");
         ai = new AI("Julia");
-        gui = new GUI("Chat with Julia", imageLocation);
-        gui.setAgent(ai);
+        gui = new GUI("Chat with Julia", ai, imageLocation);
     }
     
 }

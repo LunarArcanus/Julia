@@ -26,11 +26,12 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
 
     public String username;
 
-    public GUI(String title, String imageLocation) {
-        initialise(title, imageLocation);
+    public GUI(String title, AI ai, String imageLocation) {
+        initialise(title, ai, imageLocation);
     }
 
-    private void initialise(String title, String imageLocation) {
+    private void initialise(String title, AI ai, String imageLocation) {
+        agent = ai;
         initAvatarFrame(title, imageLocation);
         assignUsername();
         initResponseFrame();
@@ -80,7 +81,7 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
         userHistoryResponse = new JLabel();
         botHistoryResponse = new JLabel();
         JLabel userLabel = new JLabel(username);
-        JLabel botLabel = new JLabel("Julia");
+        JLabel botLabel = new JLabel(agent.getBotName());
         historyFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         historyFrame.addWindowListener(new WindowAdapter() {
             @Override
