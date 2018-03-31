@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package julia;
 
 import java.io.File;
@@ -11,7 +5,7 @@ import org.alicebot.ab.*;
 
 /**
  *
- * @author 3ynar
+ * @author Eynar Roshev
  */
 public class AI {
     private String botName;
@@ -34,5 +28,13 @@ public class AI {
     
     public String getResponse() {
         return this.session.multisentenceRespond(this.query);
+    }
+    
+    public String getBotName() {
+        return botName;
+    }
+    
+    public void setBotName(String name) {
+        botName = name;
     }
 }
