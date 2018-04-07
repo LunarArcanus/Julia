@@ -16,16 +16,18 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
     private JFrame responseFrame;
     private JFrame historyFrame;
 
-    private JLabel userHistoryResponse;
-    private JLabel botHistoryResponse;
+    private JPanel responsePanel;
+    private JPanel historyPanel;
 
-    private JLabel botResponse;
+    private JLabel responseLabel;
     private JTextField userText;
 
     private JButton sayButton;
 
+    private JLabel responseBotLabel;
+
     public String username;
-    
+
     private JLabel[] chatHistory;
     private int chatIndex = 0;
 
@@ -80,17 +82,17 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
 
     private void initHistoryFrame() {
         historyFrame = new JFrame("History");
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        
-        userHistoryResponse = new JLabel();
-        botHistoryResponse = new JLabel();
-        
-        JLabel userLabel = new JLabel(username);
-        JLabel botLabel = new JLabel(agent.getBotName());
-        userLabel.setForeground(Color.green);
-        botLabel.setForeground(Color.blue);
-        
+        historyPanel = new JPanel();
+        historyPanel.setLayout(new BoxLayout(historyPanel, BoxLayout.Y_AXIS));
+
+        // Populate the chat history slots with JLabels
+        for (int i = 0; i < chatHistory.length; i += 2) {
+            chatHistory[i] = new JLabel();
+            chatHistory[i].setForeground(Color.green);
+            chatHistory[i + 1] = new JLabel();
+            chatHistory[i + 1].setForeground(Color.blue);
+        }
+
         historyFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         historyFrame.addWindowListener(new WindowAdapter() {
             @Override
@@ -103,17 +105,13 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
             }
         });
 
-        panel.add(userLabel);
-        panel.add(userHistoryResponse);
-        panel.add(botLabel);
-        panel.add(botHistoryResponse);
-        historyFrame.add(panel);
+        historyFrame.add(historyPanel);
         historyFrame.pack();
         historyFrame.setVisible(true);
     }
 
     private void initResponseFrame() {
-        JPanel panel = new JPanel();
+        responsePanel = new JPanel();
 
         responseFrame = new JFrame("Dialogue");
         responseFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -128,31 +126,47 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
             }
         });
 
-        panel.setLayout(new FlowLayout());
+        responsePanel.setLayout(new FlowLayout());
 
-        botResponse = new JLabel("Enter your text here");
+        responseLabel = new JLabel("Enter your text here");
+        responseBotLabel = new JLabel();
+        responseBotLabel.setForeground(Color.blue);
         userText = new JTextField(50);
         userText.addKeyListener(this);
         sayButton = new JButton("Say");
         sayButton.setBackground(Color.green);
         sayButton.addActionListener(this);
 
-        panel.add(botResponse);
-        panel.add(userText);
-        panel.add(sayButton);
+        responsePanel.add(responseLabel);
+        responsePanel.add(userText);
+        responsePanel.add(sayButton);
+        responsePanel.add(responseBotLabel);
 
-        responseFrame.add(panel);
+        responseFrame.add(responsePanel);
         responseFrame.pack();
         responseFrame.setVisible(true);
     }
-    
+
     private void advanceHistory() {
         if (chatIndex < 10) {
             chatIndex++;
-        }
-        else {
+        } else {
             chatIndex = 0;
         }
+    }
+
+    private void updateHistory(String userQuery, String botResponse) {
+        // Update the chat history.
+        // There are slots, with 5 for user queries and 5 for bot responses
+        // which are arranged in pairs.
+        chatHistory[chatIndex].setText(username + ": " + userQuery);
+        historyPanel.add(chatHistory[chatIndex]);
+
+        advanceHistory();
+        chatHistory[chatIndex].setText(agent.getBotName() + ": " + botResponse);
+        historyPanel.add(chatHistory[chatIndex]);
+        historyFrame.pack();
+
     }
 
     @Override
@@ -165,9 +179,9 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
             agent.setQuery(text);
             response = agent.getResponse();
             userText.setText(null);
-            System.out.println(response);
-            userHistoryResponse.setText(text);
-            botHistoryResponse.setText(response);
+            responseBotLabel.setText(response);
+            responseFrame.pack();
+            updateHistory(text, response);
         }
     }
 
