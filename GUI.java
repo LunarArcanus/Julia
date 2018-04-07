@@ -148,7 +148,7 @@ public class GUI extends JApplet implements ActionListener, KeyListener {
     }
 
     private void advanceHistory() {
-        if (chatIndex < 10) {
+        if (chatIndex < 9) {
             chatIndex++;
         } else {
             chatIndex = 0;
